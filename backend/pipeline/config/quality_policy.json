@@ -1,0 +1,21 @@
+{
+  "weights": {
+    "reputation_weight": 0.25,
+    "compensation_weight": 0.25,
+    "prestige_weight": 0.20,
+    "source_trust_weight": 0.15,
+    "career_growth_weight": 0.15
+  },
+  "tier_thresholds": {
+    "tier_1_elite": 95,
+    "tier_2_high_value": 80,
+    "tier_3_mid_level": 60
+  },
+  "source_trust_scores": {
+    "cs_greenhouse_lever": 95,
+    "cs_unstop": 88,
+    "cs_aicte": 85,
+    "cs_naukri": 78,
+    "cs_internshala": 75
+  }
+}

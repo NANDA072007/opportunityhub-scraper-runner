@@ -1,0 +1,85 @@
+{
+  "version": "1.0",
+  "degrees": {
+    "B.Tech": {
+      "aliases": ["b tech", "b.tech", "btech", "bachelor of technology", "bachelor's in technology"],
+      "level": "bachelors"
+    },
+    "B.E.": {
+      "aliases": ["b.e", "be", "bachelor of engineering", "b.e."],
+      "level": "bachelors"
+    },
+    "M.Tech": {
+      "aliases": ["m tech", "m.tech", "mtech", "master of technology", "master's in technology"],
+      "level": "masters"
+    },
+    "M.E.": {
+      "aliases": ["m.e", "me", "master of engineering", "m.e."],
+      "level": "masters"
+    },
+    "B.Sc": {
+      "aliases": ["b sc", "b.sc", "bsc", "bachelor of science", "bachelor's in science"],
+      "level": "bachelors"
+    },
+    "M.Sc": {
+      "aliases": ["m sc", "m.sc", "msc", "master of science", "master's in science"],
+      "level": "masters"
+    },
+    "BCA": {
+      "aliases": ["bca", "bachelor of computer applications"],
+      "level": "bachelors"
+    },
+    "MCA": {
+      "aliases": ["mca", "master of computer applications"],
+      "level": "masters"
+    },
+    "BBA": {
+      "aliases": ["bba", "bachelor of business administration"],
+      "level": "bachelors"
+    },
+    "MBA": {
+      "aliases": ["mba", "master of business administration"],
+      "level": "masters"
+    },
+    "B.Com": {
+      "aliases": ["b com", "b.com", "bcom", "bachelor of commerce"],
+      "level": "bachelors"
+    },
+    "M.Com": {
+      "aliases": ["m com", "m.com", "mcom", "master of commerce"],
+      "level": "masters"
+    },
+    "Diploma": {
+      "aliases": ["diploma", "polytechnic", "3 year diploma", "diploma in engineering"],
+      "level": "diploma"
+    },
+    "Ph.D": {
+      "aliases": ["phd", "ph.d", "ph.d.", "doctor of philosophy"],
+      "level": "doctorate"
+    },
+    "B.Arch": {
+      "aliases": ["b arch", "b.arch", "barch", "bachelor of architecture"],
+      "level": "bachelors"
+    },
+    "M.Arch": {
+      "aliases": ["m arch", "m.arch", "march", "master of architecture"],
+      "level": "masters"
+    },
+    "B.Des": {
+      "aliases": ["b des", "b.des", "bdes", "bachelor of design"],
+      "level": "bachelors"
+    },
+    "M.Des": {
+      "aliases": ["m des", "m.des", "mdes", "master of design"],
+      "level": "masters"
+    },
+    "B.A.": {
+      "aliases": ["b a", "b.a", "ba", "bachelor of arts"],
+      "level": "bachelors"
+    },
+    "M.A.": {
+      "aliases": ["m a", "m.a", "ma", "master of arts"],
+      "level": "masters"
+    }
+  }
+}

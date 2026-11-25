@@ -1,0 +1,55 @@
+# Secrets & environment files — NEVER commit
+.env
+.env.*
+*.env
+!*.env.example
+env.json
+env.jsonc
+google-services.json
+GoogleService-Info.plist
+*firebase-adminsdk*.json
+*service-account*.json
+*service_account*.json
+*credentials*.json
+*.json
+!backend/data/*.json
+!backend/pipeline/config/quality_policy.json
+
+# Signing keys & certificates
+*.jks
+*.keystore
+*.pem
+*.p12
+*.key
+key.properties
+
+# Excluded project trees (private client & schema live elsewhere)
+lib/
+android/
+ios/
+supabase/
+test/
+build/
+debug_info/
+
+# Python / Runtime artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+venv/
+.venv/
+
+# Logs, scratch & local artifacts
+backend/logs/
+backend/ops/
+scratch/
+*.log
+*.apk
+*.aab
+.DS_Store
+Thumbs.db

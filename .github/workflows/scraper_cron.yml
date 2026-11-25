@@ -1,0 +1,90 @@
+name: OpportunityHub Autonomous Scraper & Maintenance
+
+on:
+  schedule:
+    # Runs every 6 hours (unlimited free minutes on a public repo)
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Specific scraper to run (leave empty for all)"
+        required: false
+        default: ""
+        type: string
+      dry_run:
+        description: "Dry run (skip database writes)"
+        required: false
+        default: false
+        type: boolean
+      force_health_email:
+        description: "Send pipeline health email even if all checks are green"
+        required: false
+        default: "false"
+        type: boolean
+
+concurrency:
+  group: opportunityhub-scraper-run
+  cancel-in-progress: false
+
+jobs:
+  scrape-and-maintain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout Stateless Scraper
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install firebase-admin
+
+      - name: Backend Syntax Check
+        run: python -m compileall -q backend
+
+      - name: Run Ingestion, Pruning & FCM Drain
+        env:
+          PYTHONPATH: "."
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          FIREBASE_CREDENTIALS_JSON: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
+          ALERT_SMTP_USER: ${{ secrets.ALERT_SMTP_USER }}
+          ALERT_SMTP_APP_PASSWORD: ${{ secrets.ALERT_SMTP_APP_PASSWORD }}
+          ALERT_TO_EMAIL: ${{ secrets.ALERT_TO_EMAIL }}
+          FORCE_HEALTH_EMAIL: ${{ inputs.force_health_email || 'false' }}
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.source }}" ]; then
+            ARGS="$ARGS --source ${{ inputs.source }}"
+          fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          python backend/scripts/run_pipeline.py $ARGS
+
+      - name: Verify Active Application Links
+        env:
+          PYTHONPATH: "."
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="--dry-run"
+          fi
+          python backend/scripts/run_pipeline.py --verify-links $ARGS
+
+      - name: Data Freshness Probe
+        env:
+          PYTHONPATH: "."
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python -m backend.scripts.check_data_freshness

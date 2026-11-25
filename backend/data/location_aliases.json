@@ -1,0 +1,176 @@
+{
+  "version": "2.0",
+  "locations": {
+    "Anantapur": {
+      "aliases": ["anantapur", "anantapuramu", "atp", "anantapur ap", "anantapur andhra pradesh", "anantapuramu ap"],
+      "state": "Andhra Pradesh",
+      "district": "Anantapur",
+      "tier": "Tier-3",
+      "country": "India",
+      "kind": "city"
+    },
+    "Visakhapatnam": {
+      "aliases": ["visakhapatnam", "vizag", "waltair", "visakhapatnam ap"],
+      "state": "Andhra Pradesh",
+      "district": "Visakhapatnam",
+      "tier": "Tier-2",
+      "country": "India",
+      "kind": "city"
+    },
+    "Vijayawada": {
+      "aliases": ["vijayawada", "bezawada", "vijayawada ap"],
+      "state": "Andhra Pradesh",
+      "district": "NTR",
+      "tier": "Tier-2",
+      "country": "India",
+      "kind": "city"
+    },
+    "Tirupati": {
+      "aliases": ["tirupati", "tirupati ap"],
+      "state": "Andhra Pradesh",
+      "district": "Tirupati",
+      "tier": "Tier-3",
+      "country": "India",
+      "kind": "city"
+    },
+    "Kurnool": {
+      "aliases": ["kurnool", "kurnool ap"],
+      "state": "Andhra Pradesh",
+      "district": "Kurnool",
+      "tier": "Tier-3",
+      "country": "India",
+      "kind": "city"
+    },
+    "Kadapa": {
+      "aliases": ["kadapa", "cuddapah", "kadapa ap"],
+      "state": "Andhra Pradesh",
+      "district": "YSR Kadapa",
+      "tier": "Tier-3",
+      "country": "India",
+      "kind": "city"
+    },
+    "Bengaluru": {
+      "aliases": ["bangalore", "bengaluru", "blr", "bengaluru karnataka", "bangalore india"],
+      "state": "Karnataka",
+      "country": "India",
+      "kind": "city"
+    },
+    "Hyderabad": {
+      "aliases": ["hyderabad", "hyd", "secunderabad", "cyberabad", "hyderabad telangana", "hitec city"],
+      "state": "Telangana",
+      "country": "India",
+      "kind": "city"
+    },
+    "Mumbai": {
+      "aliases": ["mumbai", "bombay", "navi mumbai", "thane", "mumbai maharashtra"],
+      "state": "Maharashtra",
+      "country": "India",
+      "kind": "city"
+    },
+    "Pune": {
+      "aliases": ["pune", "hinjewadi", "baner", "pune maharashtra"],
+      "state": "Maharashtra",
+      "country": "India",
+      "kind": "city"
+    },
+    "Delhi": {
+      "aliases": ["delhi", "new delhi", "ncr", "national capital region"],
+      "state": "Delhi",
+      "country": "India",
+      "kind": "city"
+    },
+    "Gurugram": {
+      "aliases": ["gurugram", "gurgaon", "gurgaon haryana"],
+      "state": "Haryana",
+      "country": "India",
+      "kind": "city"
+    },
+    "Noida": {
+      "aliases": ["noida", "greater noida", "noida uttar pradesh"],
+      "state": "Uttar Pradesh",
+      "country": "India",
+      "kind": "city"
+    },
+    "Chennai": {
+      "aliases": ["chennai", "madras", "omr", "chennai tamil nadu"],
+      "state": "Tamil Nadu",
+      "country": "India",
+      "kind": "city"
+    },
+    "Kolkata": {
+      "aliases": ["kolkata", "calcutta", "salt lake", "kolkata west bengal"],
+      "state": "West Bengal",
+      "country": "India",
+      "kind": "city"
+    },
+    "Ahmedabad": {
+      "aliases": ["ahmedabad", "gandhinagar", "ahmedabad gujarat"],
+      "state": "Gujarat",
+      "country": "India",
+      "kind": "city"
+    },
+    "Jaipur": {
+      "aliases": ["jaipur", "jaipur rajasthan"],
+      "state": "Rajasthan",
+      "country": "India",
+      "kind": "city"
+    },
+    "Chandigarh": {
+      "aliases": ["chandigarh"],
+      "state": "Chandigarh",
+      "country": "India",
+      "kind": "city"
+    },
+    "Lucknow": {
+      "aliases": ["lucknow", "lucknow uttar pradesh"],
+      "state": "Uttar Pradesh",
+      "country": "India",
+      "kind": "city"
+    },
+    "Indore": {
+      "aliases": ["indore", "indore madhya pradesh"],
+      "state": "Madhya Pradesh",
+      "country": "India",
+      "kind": "city"
+    },
+    "Coimbatore": {
+      "aliases": ["coimbatore", "coimbatore tamil nadu"],
+      "state": "Tamil Nadu",
+      "country": "India",
+      "kind": "city"
+    },
+    "Kochi": {
+      "aliases": ["kochi", "cochin", "kochi kerala"],
+      "state": "Kerala",
+      "country": "India",
+      "kind": "city"
+    },
+    "New York": {
+      "aliases": ["new york", "nyc", "new york city"],
+      "state": "New York",
+      "country": "United States",
+      "kind": "city"
+    },
+    "San Francisco": {
+      "aliases": ["san francisco", "sf", "san francisco bay area"],
+      "state": "California",
+      "country": "United States",
+      "kind": "city"
+    },
+    "London": {
+      "aliases": ["london", "london uk"],
+      "state": "England",
+      "country": "United Kingdom",
+      "kind": "city"
+    },
+    "Remote": {
+      "aliases": ["remote", "work from home", "wfh", "virtual", "telecommute", "fully remote", "remote anywhere"],
+      "state": null,
+      "country": "Global",
+      "kind": "remote"
+    }
+  },
+  "remote_keywords": ["remote", "work from home", "wfh", "telecommute", "virtual", "fully remote", "remote-first", "work remotely"],
+  "hybrid_keywords": ["hybrid", "hybrid work", "onsite", "on-site", "in office", "in-office"],
+  "india_synonyms": ["india", "all india", "pan india", "anywhere in india"]
+}
