@@ -45,6 +45,7 @@ from backend.pipeline.data_contract import (
 from backend.pipeline.student_signal_extractor import extract_student_signals
 from backend.pipeline.government_digest_extractor import extract_government_digest
 from backend.pipeline.notification_worker import drain_notification_delivery_queue
+from backend.pipeline.health_alerter import run_health_check_and_alert
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 logger = logging.getLogger("PipelineOrchestrator")
@@ -299,7 +300,7 @@ class PipelineOrchestrator:
             logger.warning(f"Could not load config for '{source_slug}' from Supabase: {e}")
         return {}, default_rep
 
-    def _purge_old_quarantine(self) -> None:
+    def _purge_old_quarantine(self, errors: Optional[List[str]] = None) -> None:
         """Purge quarantine records older than 3 days in timeout-safe batches."""
         total_deleted = 0
         try:
@@ -315,9 +316,12 @@ class PipelineOrchestrator:
             if total_deleted:
                 logger.info(f"[maintenance] Purged {total_deleted} old quarantine rows")
         except Exception as exc:
-            logger.warning(f"[maintenance] Batched quarantine purge failed: {exc}")
+            msg = f"Batched quarantine purge failed: {exc}"
+            logger.warning(f"[maintenance] {msg}")
+            if errors is not None:
+                errors.append(msg)
 
-    def _cleanup_expired_opportunities(self) -> None:
+    def _cleanup_expired_opportunities(self, errors: Optional[List[str]] = None) -> None:
         """Expire past-deadline listings and hard-prune unreferenced expired rows >14d."""
         try:
             res = self.supabase.rpc(
@@ -350,9 +354,12 @@ class PipelineOrchestrator:
                 "review_status": "expired"
             }).is_("deadline", "null").lt("posted_at", null_cutoff).eq("status", "active").execute()
         except Exception as e:
-            logger.warning(f"expired cleanup skipped/failed: {e}")
+            msg = f"expired cleanup skipped/failed: {e}"
+            logger.warning(msg)
+            if errors is not None:
+                errors.append(msg)
 
-    def _enqueue_bookmark_deadline_reminders(self) -> None:
+    def _enqueue_bookmark_deadline_reminders(self, errors: Optional[List[str]] = None) -> None:
         """Trigger SQL RPC to queue 48-hour closing reminders for un-applied bookmarks."""
         try:
             res = self.supabase.rpc("enqueue_expiring_bookmark_reminders").execute()
@@ -360,26 +367,39 @@ class PipelineOrchestrator:
             if queued:
                 logger.info(f"[maintenance] Queued {queued} expiring bookmark deadline reminders.")
         except Exception as exc:
-            logger.warning(f"[maintenance] Failed to enqueue expiring bookmark reminders: {exc}")
+            msg = f"Failed to enqueue expiring bookmark reminders: {exc}"
+            logger.warning(f"[maintenance] {msg}")
+            if errors is not None:
+                errors.append(msg)
 
     def _run_session_maintenance(self) -> None:
         """Runs once per pipeline invocation: purges quarantine, expires stale rows,
-        enqueues 48h bookmark reminders, and drains notification_delivery_queue."""
+        enqueues 48h bookmark reminders, drains notification_delivery_queue, and
+        runs pipeline health check & SMTP alerting."""
         if getattr(self, "_maintenance_ran_this_session", False):
             return
         self._maintenance_ran_this_session = True
 
-        self._purge_old_quarantine()
-        self._cleanup_expired_opportunities()
+        maint_errors: List[str] = []
+        self._purge_old_quarantine(errors=maint_errors)
+        self._cleanup_expired_opportunities(errors=maint_errors)
 
         # 1. Enqueue 48-hour closing reminders for un-applied bookmarks
-        self._enqueue_bookmark_deadline_reminders()
+        self._enqueue_bookmark_deadline_reminders(errors=maint_errors)
 
         # 2. Drain pending notifications via FCM HTTP v1
         try:
             drain_notification_delivery_queue(self.supabase, batch_size=200)
         except Exception as exc:
-            logger.warning(f"[maintenance] drain_notification_delivery_queue failed: {exc}")
+            msg = f"drain_notification_delivery_queue failed: {exc}"
+            logger.warning(f"[maintenance] {msg}")
+            maint_errors.append(msg)
+
+        # 3. Pipeline health snapshot check & SMTP email alert (if breached/forced)
+        try:
+            run_health_check_and_alert(self.supabase, extra_errors=maint_errors)
+        except Exception as exc:
+            logger.warning(f"[maintenance] run_health_check_and_alert failed: {exc}")
 
     @staticmethod
     def _is_valid_fingerprint(fp: Optional[str]) -> bool:
