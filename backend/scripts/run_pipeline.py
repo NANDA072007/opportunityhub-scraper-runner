@@ -93,6 +93,11 @@ def main() -> int:
     parser.add_argument("--source", help="Only run this source_slug (default: all registered sources).")
     parser.add_argument("--dry-run", action="store_true", help="Skip all database writes and telemetry.")
     parser.add_argument("--verify-links", action="store_true", help="Verify active application link liveness.")
+    parser.add_argument(
+        "--allow-partial-failure",
+        action="store_true",
+        help="Exit 0 as long as at least one source succeeds (only exit 1 if all sources error).",
+    )
     args = parser.parse_args()
 
     if args.verify_links:
@@ -125,7 +130,16 @@ def main() -> int:
 
     _print_summary(results)
 
-    if any(res.get("status") == "error" for res in results.values()):
+    failed = [slug for slug, res in results.items() if res.get("status") == "error"]
+    if failed:
+        if args.allow_partial_failure and len(failed) < len(results):
+            logger.warning(
+                "Partial failure allowed: %d/%d source(s) errored (%s), continuing.",
+                len(failed),
+                len(results),
+                ", ".join(failed),
+            )
+            return 0
         return 1
     return 0
 

@@ -19,7 +19,7 @@ on:
       force_health_email:
         description: "Send pipeline health email even if all checks are green"
         required: false
-        default: "false"
+        default: false
         type: boolean
 
 concurrency:
@@ -68,7 +68,7 @@ jobs:
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             ARGS="$ARGS --dry-run"
           fi
-          python backend/scripts/run_pipeline.py $ARGS
+          python backend/scripts/run_pipeline.py --allow-partial-failure $ARGS
 
       - name: Verify Active Application Links
         env:
