@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
@@ -114,11 +115,23 @@ class ApplyLinkVerifier:
         http: Optional[ConnectorHttpClient] = None,
         http_client: Optional[httpx.Client] = None,
         max_results: int = 1000,
+        max_workers: Optional[int] = None,
     ) -> None:
         if http is not None:
             self._http = http
+            self._max_workers = max_workers if max_workers is not None else 1
+        elif http_client is not None:
+            self._http = ConnectorHttpClient(client=http_client, max_retries=1)
+            self._max_workers = max_workers if max_workers is not None else 1
         else:
-            self._http = ConnectorHttpClient(client=http_client, max_retries=2, rate_limit_per_sec=5.0)
+            # Link liveness checks fail fast on dead/geo-blocked hosts and run
+            # concurrently across independent domains to stay well under CI limits.
+            self._http = ConnectorHttpClient(
+                timeout=8.0,
+                max_retries=1,
+                rate_limit_per_sec=None,
+            )
+            self._max_workers = max_workers if max_workers is not None else 12
         self._max_results = max_results
 
     # ------------------------------------------------------------------
@@ -142,17 +155,31 @@ class ApplyLinkVerifier:
             A list of VerificationResult, one per unique URL (capped at
             ``max_results``).
         """
-        results: List[VerificationResult] = []
+        unique_urls: List[str] = []
         seen: set = set()
         for url in urls:
             if not url or url in seen:
                 continue
             seen.add(url)
-            if len(results) >= self._max_results:
+            if len(unique_urls) >= self._max_results:
                 logger.warning("ApplyLinkVerifier reached max_results=%d", self._max_results)
                 break
-            results.append(self.verify_url(url, check_content=check_content))
-        return results
+            unique_urls.append(url)
+
+        if not unique_urls:
+            return []
+
+        if self._max_workers <= 1 or len(unique_urls) == 1:
+            return [self.verify_url(url, check_content=check_content) for url in unique_urls]
+
+        worker_count = min(self._max_workers, len(unique_urls))
+        with ThreadPoolExecutor(max_workers=worker_count) as executor:
+            return list(
+                executor.map(
+                    lambda u: self.verify_url(u, check_content=check_content),
+                    unique_urls,
+                )
+            )
 
     def verify_url(self, url: str, *, check_content: bool = False) -> VerificationResult:
         """Verify a single apply URL."""
@@ -168,7 +195,7 @@ class ApplyLinkVerifier:
             response = self._http.get(url)
         except httpx.HTTPStatusError as exc:
             return self._classify_http_error(url, exc.response, _elapsed(start))
-        except (httpx.ConnectError, httpx.ReadTimeout, httpx.WriteTimeout) as exc:
+        except (httpx.ConnectError, httpx.TimeoutException) as exc:
             return VerificationResult(
                 apply_url=url,
                 status=VerificationStatus.UNREACHABLE,

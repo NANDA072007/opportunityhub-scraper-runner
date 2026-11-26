@@ -1156,7 +1156,7 @@ class PipelineOrchestrator:
         except Exception as e:
             logger.error(f"Failed to record daily stats: {e}")
 
-    def verify_active_links(self, limit: int = 500) -> Dict[str, Any]:
+    def verify_active_links(self, limit: int = 200) -> Dict[str, Any]:
         """Runs ApplyLinkVerifier against active opportunities in Supabase.
 
         Confirmed DEAD (404/410) or CLOSED results transition the record to status='expired', is_active=False.
