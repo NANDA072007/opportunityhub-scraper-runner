@@ -95,54 +95,62 @@
   <div class="container">
     <header>
       <h1>OpportunityHub Privacy Policy</h1>
-      <p class="meta">Effective Date: September 6, 2026 | Application Version: 1.2.0+</p>
+      <p class="meta">Effective Date: November 27, 2026 | Application Version: 1.2.6+</p>
     </header>
 
     <main>
       <h2>1. Introduction</h2>
-      <p>Welcome to <strong>OpportunityHub</strong> ("we", "our", or "us"). OpportunityHub is an AI-driven, zero-dead-link opportunity discovery platform designed to help students, graduates, and job seekers discover verified internships, private sector jobs, government research notifications, hackathons, freelance gigs, and merit scholarships.</p>
-      <p>We respect your privacy and are committed to protecting the personal data you share with us. This Privacy Policy explains how we collect, use, store, disclose, and safeguard your information when you use our mobile application and services.</p>
+      <p>Welcome to <strong>OpportunityHub</strong> ("we", "our", or "us"). OpportunityHub is an independent, AI-assisted opportunity discovery platform designed to help students, graduates, and job seekers discover verified internships, private sector jobs, government research notifications, hackathons, freelance gigs, and merit scholarships. OpportunityHub is NOT affiliated with any government entity.</p>
+      <p>We respect your privacy and are committed to protecting the personal data you share with us. This Privacy Policy explains how we collect, use, store, disclose, retain, and safeguard your information when you use our mobile application and services.</p>
 
       <h2>2. Information We Collect</h2>
       <p><strong>A. Information You Provide Directly</strong></p>
       <ul>
-        <li><strong>Account Credentials:</strong> Name, email address, and authentication credentials via Supabase Auth.</li>
-        <li><strong>Profile & Education Data:</strong> Degree, field of study (branch), graduation year, skills, and career interests.</li>
-        <li><strong>Location Preferences:</strong> Preferred work locations (Tier-3 cities like Anantapur, regional hubs, metros, or Remote).</li>
-        <li><strong>Saved Items:</strong> Bookmarked opportunities and custom search alert filters.</li>
+        <li><strong>Account Credentials:</strong> Name, email address, and authentication identifiers via Supabase Auth (Guest browsing is also available without creating an account).</li>
+        <li><strong>Profile & Education Data:</strong> Degree, field of study (branch), graduation year, skills, target roles, and career interests.</li>
+        <li><strong>Location Preferences:</strong> User-entered preferred work cities or Remote preferences (we do NOT request device GPS or background location permissions).</li>
+        <li><strong>Optional Resume PDF (Files & Docs):</strong> If you choose to upload a resume PDF, it is parsed on-device for skill matching and stored in a private per-user Supabase Storage bucket (<code>resumes/{userId}/resume.pdf</code>).</li>
+        <li><strong>Saved Content & Activity:</strong> Bookmarked opportunities, tracked applications, notes, follow-up dates, and in-app interaction signals (views, saves, applies, dismissals) used to personalize recommendations.</li>
       </ul>
       <p><strong>B. Information Collected Automatically</strong></p>
       <ul>
-        <li><strong>Device Information:</strong> OS version (Android/iOS), app version, device model.</li>
-        <li><strong>App Telemetry:</strong> Crash logs and performance metrics used solely for app stability.</li>
-        <li><strong>Push Notification Tokens:</strong> Firebase Cloud Messaging (FCM) tokens for opt-in job alerts.</li>
+        <li><strong>Device & App Info:</strong> OS version, app version, and device model.</li>
+        <li><strong>Crash Logs & Diagnostics:</strong> Automatic crash reports, stack traces, and stability diagnostics collected via <strong>Firebase Crashlytics</strong>.</li>
+        <li><strong>Push Notification Tokens:</strong> Firebase Cloud Messaging (FCM) device tokens solely for delivering opt-in opportunity and deadline alerts.</li>
       </ul>
 
       <h2>3. How We Use Your Information</h2>
       <ul>
-        <li>To deliver a personalized opportunity feed matching your skills and location preferences.</li>
-        <li>To push real-time alerts when new matching internships, jobs, or scholarships are ingested.</li>
-        <li>To store your recent feed data locally via Hive storage for offline access.</li>
-        <li>To maintain app security, verify apply link integrity, and detect bugs.</li>
+        <li>To deliver a personalized opportunity feed matching your skills, target roles, and location preferences.</li>
+        <li>To dispatch opt-in push notifications for matching opportunities and 48-hour bookmark closing reminders.</li>
+        <li>To cache recent listings locally via Hive storage for fast startup and offline browsing.</li>
+        <li>To detect crashes, maintain app security, verify apply-link integrity, and fix bugs.</li>
       </ul>
 
       <h2>4. Third-Party Services & Data Processors</h2>
       <p>We integrate with trusted service providers complying with modern security standards:</p>
       <ul>
-        <li><strong>Supabase:</strong> Database hosting, authentication, and encrypted data storage.</li>
-        <li><strong>Firebase Cloud Messaging (FCM):</strong> Push notification delivery.</li>
-        <li><strong>GitHub:</strong> Codebase repository and public release distribution.</li>
+        <li><strong>Supabase:</strong> Database hosting, authentication, and private encrypted storage for optional resume PDFs.</li>
+        <li><strong>Firebase Crashlytics (Google):</strong> Crash reporting and app stability diagnostics.</li>
+        <li><strong>Firebase Cloud Messaging / FCM (Google):</strong> Delivery of opt-in push notifications.</li>
+        <li><strong>GitHub Pages:</strong> Static hosting for our public Privacy Policy and Account Deletion portal.</li>
       </ul>
-      <p><em>We do NOT sell, rent, trade, or monetize your personal data to third-party advertisers.</em></p>
+      <p><em>We do NOT integrate advertising SDKs, do NOT use Advertising ID, and do NOT sell, rent, or trade your personal data to advertisers or data brokers.</em></p>
 
-      <h2>5. Data Storage and Security</h2>
-      <p>All data transmitted between the mobile application and our servers is encrypted in transit using standard TLS/HTTPS. Production databases enforce Row-Level Security (RLS) policies.</p>
+      <h2>5. Data Storage, Security & Retention</h2>
+      <p>All data transmitted between the mobile application and our servers is encrypted in transit using standard TLS/HTTPS. Production databases enforce strict Row-Level Security (RLS) policies.</p>
+      <ul>
+        <li><strong>Account, Profile, Bookmarks & Tracked Applications:</strong> Retained until you delete individual items or permanently delete your account.</li>
+        <li><strong>Uploaded Resume PDFs:</strong> Retained in private per-user storage until you replace/remove the file or delete your account.</li>
+        <li><strong>Interaction Signals & FCM Tokens:</strong> Retained while your account is active and permanently purged or anonymized upon account deletion.</li>
+        <li><strong>Crash Diagnostics:</strong> Retained within Firebase Crashlytics in accordance with Firebase's configured diagnostic retention window.</li>
+      </ul>
 
       <h2>6. Children's Privacy</h2>
-      <p>OpportunityHub is intended for students and job seekers aged 13 and above. We do not knowingly collect personal information from children under 13.</p>
+      <p>OpportunityHub is intended for students, graduates, and working professionals (18+ / not directed at children under 13). We do not knowingly collect personal information from children under 13.</p>
 
       <h2>7. Your Data Rights & Account Deletion</h2>
-      <p>You can view and update your profile directly inside app settings. You may permanently delete your account and associated data at any time in app settings (Notification Settings &rarr; Delete Account Permanently) or by visiting our dedicated <a href="delete_account.html" target="_blank">Account Deletion Page</a>.</p>
+      <p>You can view and update your profile directly inside the app. You may permanently delete your account and all associated server and local data immediately at any time via <strong>Me &rarr; Account &amp; Data Deletion &rarr; Delete Account</strong> (or <strong>Settings &rarr; DELETE ACCOUNT PERMANENTLY</strong>), or by submitting a request on our dedicated <a href="https://nanda072007.github.io/opportunityhub-scraper-runner/delete_account.html" target="_blank">Account Deletion Page</a> (processed within 48 hours).</p>
 
       <h2>8. Contact Us</h2>
       <p>For questions or privacy concerns, please contact the developer via email at <a href="mailto:nandasunil273@gmail.com">nandasunil273@gmail.com</a>.</p>
